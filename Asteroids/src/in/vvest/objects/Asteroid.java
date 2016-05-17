@@ -67,7 +67,8 @@ public class Asteroid {
 		if (!p.isInvincible()) {
 			Polygon playerShip = p.getShape();
 			for (int i = 0; i < playerShip.npoints; i++) {
-				Vec2 vertice = new Vec2(playerShip.xpoints[i], playerShip.ypoints[i]).rotate(-p.getAngle()).add(p.getPos()).subtract(pos).rotate(-angle);
+				Vec2 vertice = new Vec2(playerShip.xpoints[i], playerShip.ypoints[i]).rotate(p.getAngle()).add(p.getPos()).subtract(pos).rotate(-angle);
+				
 				if (shape.contains(vertice.asPoint())) {
 					for (int j = 0; j < 40; j++)
 						particles.addParticleEffect((int) p.getPos().x, (int) p.getPos().y, 1, 1, 750, 2, Color.WHITE);

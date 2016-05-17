@@ -21,6 +21,7 @@ public class MainMenuState extends GameState {
 	private List<Asteroid> asteroids;
 	private ParticleSystem particles;
 	private long lastFire;
+	private long transitionTime;
 	
 	public MainMenuState(GameStateManager gsm) {
 		super(gsm);
@@ -30,6 +31,8 @@ public class MainMenuState extends GameState {
 		asteroids = new ArrayList<Asteroid>();
 		asteroids.add(new Asteroid(new Vec2(345, 230), Asteroid.Size.LARGE));
 		asteroids.get(0).setVel(new Vec2(0, 0));
+		particles = new ParticleSystem();
+		transitionTime = 0;
 	}
 
 	public void draw(Graphics g) {
@@ -54,10 +57,12 @@ public class MainMenuState extends GameState {
 		for (int i = asteroids.size() - 1; i >= 0; i--) {
 			asteroids.get(i).draw(g);
 		}
+		particles.draw(g);
 	}
 
 	public void update() {
 		p.update(keyState);
+		particles.update();
 		if (keyState.containsKey("space") && keyState.get("space") && System.currentTimeMillis() - lastFire > 250) {
 			lasers.add(new Laser(p.getPos(), p.getAngle()));
 			lastFire = System.currentTimeMillis();
@@ -70,8 +75,12 @@ public class MainMenuState extends GameState {
 		for (int i = asteroids.size() - 1; i >= 0; i--) {
 			asteroids.get(i).update(p, lasers, asteroids, i, particles);
 		}
-		if (asteroids.size() > 1) {
-			gsm.setGameState(gsm.getCurrentGameState(), new CountDownState(gsm, 3, new PlayState(gsm)));
+		if (transitionTime != 0) {
+			if (System.currentTimeMillis() >= transitionTime)
+				gsm.setGameState(gsm.getCurrentGameState(), new CountDownState(gsm, 3, new PlayState(gsm)));
+		} else if (asteroids.size() > 1) {
+			transitionTime = System.currentTimeMillis() + 650;
+			asteroids.clear();
 		}
 	}
 
