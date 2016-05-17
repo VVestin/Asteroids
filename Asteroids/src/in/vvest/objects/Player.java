@@ -23,6 +23,7 @@ public class Player {
 	
 	public Player(int numLives) {
 		this.numLives = numLives;
+		pos = new Vec2(200, 200);
 		vel = new Vec2(0, 0);
 		shape = new Polygon();
 		shape.addPoint(10, 0);

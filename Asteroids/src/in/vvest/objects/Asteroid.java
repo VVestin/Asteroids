@@ -81,6 +81,10 @@ public class Asteroid {
 		}
 	}
 
+	public void setVel(Vec2 vel) {
+		this.vel = vel;
+	}
+	
 	private List<Asteroid> explode(ParticleSystem particles) {
 		for (int i = 0; i < 3 * size.pointValue && particles != null; i++)
 			particles.addParticleEffect((int) pos.x, (int) pos.y, 1, 1, 300, 3, Color.GRAY);
