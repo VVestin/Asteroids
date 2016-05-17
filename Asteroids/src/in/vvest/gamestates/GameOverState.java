@@ -3,6 +3,7 @@ package in.vvest.gamestates;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -72,6 +73,11 @@ public class GameOverState extends GameState {
 			}
 			g.drawString(scoreMessage, (400 - fm.stringWidth(scoreMessage)) / 2, 120 + 30 * i);
 		}
+		if ((playerRank == -1 || playerName.length() >= 3) && System.currentTimeMillis() / 650 % 2 != 0) {
+			g.setFont(g.getFont().deriveFont(15f));
+			fm = g.getFontMetrics();
+			g.drawString("<Press [SPACE] to play again>", (400 - fm.stringWidth("<Press [SPACE] to play again>")) / 2, 390);
+		}
 	}
 
 	public void update() {
@@ -106,4 +112,10 @@ public class GameOverState extends GameState {
 		}
 	}
 
+	public void keyPressed(KeyEvent e) {
+		if ((playerRank == -1 || (playerName != null && playerName.length() >= 3)) && (keyState.containsKey("space") && !keyState.get("space"))) {
+			gsm.setGameState(gsm.getCurrentGameState(), new CountDownState(gsm, 3, new PlayState(gsm)));
+		}
+		super.keyPressed(e);
+	}
 }

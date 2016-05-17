@@ -51,7 +51,7 @@ public class GameStateManager extends KeyAdapter implements MouseListener, Mouse
 	}
 	
 	public void keyPressed(KeyEvent e) {
-		gameStates.get(currentState).keyPressed(e);;
+		gameStates.get(currentState).keyPressed(e);
 	}
 	
 	public void keyReleased(KeyEvent e) {
