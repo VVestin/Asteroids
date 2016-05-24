@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import in.vvest.audio.Sounds;
 import in.vvest.game.GameStateManager;
 import in.vvest.objects.Asteroid;
 import in.vvest.objects.Laser;
@@ -61,10 +62,11 @@ public class PlayState extends GameState {
 	}
 
 	public void update() {
-		p.update(keyState);
+		p.update(keyState, lasers);
 		if (keyState.containsKey("space") && keyState.get("space") && System.currentTimeMillis() - lastFire > 250) {
 			lasers.add(new Laser(p.getPos(), p.getAngle()));
 			lastFire = System.currentTimeMillis();
+			Sounds.LASER.play();
 		}
 		for (int i = lasers.size() - 1; i >= 0; i--) {
 			lasers.get(i).update();

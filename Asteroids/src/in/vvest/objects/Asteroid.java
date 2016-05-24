@@ -8,6 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.vvest.audio.Sounds;
 import in.vvest.particles.ParticleSystem;
 
 public class Asteroid {
@@ -57,7 +58,6 @@ public class Asteroid {
 		for (int i = lasers.size() - 1; i >= 0; i--) {
 			Vec2 laserPos = lasers.get(i).getPos().subtract(pos).rotate(-angle);
 			if (shape.contains(laserPos.asPoint())) {
-				p.addToScore(size.pointValue);
 				lasers.remove(i);
 				asteroids.remove(index);
 				asteroids.addAll(explode(particles));
@@ -87,6 +87,7 @@ public class Asteroid {
 	}
 	
 	private List<Asteroid> explode(ParticleSystem particles) {
+		Sounds.ASTEROID_EXPLOSION.play();
 		for (int i = 0; i < 3 * size.pointValue && particles != null; i++)
 			particles.addParticleEffect((int) pos.x, (int) pos.y, 1, 1, 300, 3, Color.GRAY);
 		List<Asteroid> children = new ArrayList<Asteroid>();

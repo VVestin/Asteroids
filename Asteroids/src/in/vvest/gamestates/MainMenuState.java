@@ -20,7 +20,6 @@ public class MainMenuState extends GameState {
 	private List<Laser> lasers;
 	private List<Asteroid> asteroids;
 	private ParticleSystem particles;
-	private long lastFire;
 	private long transitionTime;
 	
 	public MainMenuState(GameStateManager gsm) {
@@ -50,7 +49,6 @@ public class MainMenuState extends GameState {
 		if (System.currentTimeMillis() / 650 % 2 != 0)
 		g.drawString("<Destroy the asteroid to continue>", (400 - fm.stringWidth("<Destroy the asteroid to continue>")) / 2, 390);
 		
-		p.draw(g);
 		for (int i = 0; i < lasers.size(); i++) {
 			lasers.get(i).draw(g);
 		}
@@ -58,15 +56,12 @@ public class MainMenuState extends GameState {
 			asteroids.get(i).draw(g);
 		}
 		particles.draw(g);
+		p.draw(g);
 	}
 
 	public void update() {
-		p.update(keyState);
+		p.update(keyState, lasers);
 		particles.update();
-		if (keyState.containsKey("space") && keyState.get("space") && System.currentTimeMillis() - lastFire > 250) {
-			lasers.add(new Laser(p.getPos(), p.getAngle()));
-			lastFire = System.currentTimeMillis();
-		}
 		for (int i = lasers.size() - 1; i >= 0; i--) {
 			lasers.get(i).update();
 			if (lasers.get(i).isDead())

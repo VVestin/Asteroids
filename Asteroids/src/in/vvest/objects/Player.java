@@ -5,7 +5,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
+import java.util.List;
 import java.util.Map;
+
+import in.vvest.audio.Sounds;
 
 public class Player {
 	private static final double TURN_AMT = 0.05;
@@ -20,6 +23,7 @@ public class Player {
 	private int score;
 	private int numLives;
 	private long lastDeath;
+	private long lastFire;
 	
 	public Player(int numLives) {
 		this.numLives = numLives;
@@ -41,9 +45,12 @@ public class Player {
 	public void draw(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform old = g2d.getTransform();
-		if (!(isInvincible() && (System.currentTimeMillis() / 250) % 3 == 0)) {
+		if (!(isInvincible() && (System.currentTimeMillis() / 250) % 3 == 0) && System.currentTimeMillis() - lastDeath > 2000) {
 			g2d.translate(pos.x, pos.y);
 			g2d.rotate(angle);
+			g2d.setColor(Color.WHITE);
+			g2d.setColor(Color.BLACK);
+			g2d.fill(shape);
 			g2d.setColor(Color.WHITE);
 			g2d.draw(shape);
 			if (thrusting) {
@@ -57,12 +64,15 @@ public class Player {
 		for (int i = 0; i < numLives; i++) {
 			g2d.translate(20 + 20 * i, 15);
 			g2d.rotate(-Math.PI / 2);
+			g2d.setColor(Color.BLACK);
+			g2d.fill(shape);
+			g2d.setColor(Color.WHITE);
 			g2d.draw(shape);
 			g2d.setTransform(old);		
 		}
 	}
 	
-	public void update(Map<String, Boolean> keyState) {
+	public void update(Map<String, Boolean> keyState, List<Laser> lasers) {
 		if (keyState.containsKey("a") && keyState.get("a"))
 			angle -= TURN_AMT;
 		if (keyState.containsKey("d") && keyState.get("d"))
@@ -88,9 +98,17 @@ public class Player {
 			pos = new Vec2(pos.x, 400);
 		else if (pos.y > 400)
 			pos = new Vec2(pos.x, 0);
+		if (keyState.containsKey("space") && keyState.get("space") && System.currentTimeMillis() - lastFire > 250) {
+			lasers.add(new Laser(pos, angle));
+			lastFire = System.currentTimeMillis();
+			Sounds.LASER.play();
+		}
 	}
 	
 	public void explode() {
+		Sounds.PLAYER_EXPLOSION.play();
+		pos = new Vec2(200, 200);
+		angle = 0;
 		vel = new Vec2(0, 0);
 		thrusting = false;
 		numLives--;
@@ -118,7 +136,7 @@ public class Player {
 	}
 
 	public boolean isInvincible() {
-		return System.currentTimeMillis() - lastDeath < 2500;
+		return System.currentTimeMillis() - lastDeath < 4500;
 	}
 	
 	public void addToScore(int points) {
