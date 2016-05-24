@@ -8,8 +8,8 @@ Major features include:
 - Collision Detection
 - Asteroids
 - Particles
+- Sounds
 
 Planned features include:
-- Sounds
-- Main Menu
-- Bugfixes
+- Maybe a loading screen
+- Bugfixes 
