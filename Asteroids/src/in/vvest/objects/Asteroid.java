@@ -57,8 +57,10 @@ public class Asteroid {
 
 		for (int i = lasers.size() - 1; i >= 0; i--) {
 			Vec2 laserPos = lasers.get(i).getPos().subtract(pos).rotate(-angle);
-			if (shape.contains(laserPos.asPoint())) {
-				lasers.remove(i);
+			if (!lasers.get(i).isDead() && shape.contains(laserPos.asPoint())) {
+				System.out.println(lasers.size() + " " + i);
+				p.addToScore(size.pointValue);
+				lasers.get(i).setDead(true);
 				asteroids.remove(index);
 				asteroids.addAll(explode(particles));
 				break;

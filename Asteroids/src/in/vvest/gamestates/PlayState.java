@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import in.vvest.audio.Sounds;
 import in.vvest.game.GameStateManager;
 import in.vvest.objects.Asteroid;
 import in.vvest.objects.Laser;
@@ -24,7 +23,6 @@ public class PlayState extends GameState {
 	private ParticleSystem particles;
 	private Player p;
 	private int highScore;
-	private long lastFire;
 	
 	public PlayState(GameStateManager gsm) {
 		super(gsm);
@@ -63,11 +61,6 @@ public class PlayState extends GameState {
 
 	public void update() {
 		p.update(keyState, lasers);
-		if (keyState.containsKey("space") && keyState.get("space") && System.currentTimeMillis() - lastFire > 250) {
-			lasers.add(new Laser(p.getPos(), p.getAngle()));
-			lastFire = System.currentTimeMillis();
-			Sounds.LASER.play();
-		}
 		for (int i = lasers.size() - 1; i >= 0; i--) {
 			lasers.get(i).update();
 			if (lasers.get(i).isDead())
@@ -87,7 +80,8 @@ public class PlayState extends GameState {
 	private void resetLevel() {
 		p.setPos(new Vec2(200, 200));
 		p.setVel(new Vec2(0, 0));
-		p.addToScore(25);
+		if (p.getScore() != 0)
+			p.addToScore(25);
 		lasers = new ArrayList<Laser>();
 		asteroids = new ArrayList<Asteroid>();
 		for (int i = 0; i < 4; i++) {
