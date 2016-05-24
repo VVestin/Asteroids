@@ -100,7 +100,6 @@ public class Player {
 			pos = new Vec2(pos.x, 0);
 		if (keyState.containsKey("space") && keyState.get("space") && System.currentTimeMillis() - lastFire > 250) {
 			lastFire = System.currentTimeMillis();
-			System.out.println("firing lasers");
 			lasers.add(new Laser(pos, angle));
 			Sounds.LASER.play();
 		}

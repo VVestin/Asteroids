@@ -48,11 +48,6 @@ public class Laser {
 				pos = new Vec2(pos.x, 0);
 		}
 	}
-	
-	public void setDead(boolean dead) {
-		if (dead)
-			lifespan = 0;
-	}
 
 	public Vec2 getPos() {
 		return pos;
