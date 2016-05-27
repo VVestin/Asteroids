@@ -14,7 +14,7 @@ public class ParticleSystem {
     }
 
     public void addParticleEffect(int x, int y, int w, int h, int time, float speed, Color c) {
-    	particles.add(new Particle(time, c, (float) (x + Math.random() * w), (float) (y + Math.random() * h),
+    	particles.add(new Particle((int) (time * Math.random()), c, (float) (x + Math.random() * w), (float) (y + Math.random() * h),
 			(float) (speed * (Math.random() - .5f)), (float) (speed * (Math.random() - .5f))));
     }
 
