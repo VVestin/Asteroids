@@ -22,7 +22,7 @@ public class Game extends JPanel implements Runnable {
 		Dimension size = new Dimension(800, 800);
 				
 		gsm = new GameStateManager();
-		gsm.addGameState(new MainMenuState(gsm));
+		gsm.setGameState(new MainMenuState());
 		
 		setPreferredSize(size);
 		setMinimumSize(size);

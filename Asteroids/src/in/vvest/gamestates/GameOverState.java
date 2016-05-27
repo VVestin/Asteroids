@@ -10,8 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import in.vvest.game.GameStateManager;
-
 public class GameOverState extends GameState {
 	private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWYXZ";
 
@@ -23,8 +21,8 @@ public class GameOverState extends GameState {
 	private int currentLetter;
 	private long lastUp, lastDown, lastSpace;
 
-	public GameOverState(GameStateManager gsm, int playerScore) {
-		super(gsm);
+	public GameOverState(int playerScore) {
+		super();
 		this.playerScore = playerScore;
 		topPlayers = new String[5];
 		topScores = new int[5];
@@ -114,7 +112,7 @@ public class GameOverState extends GameState {
 
 	public void keyPressed(KeyEvent e) {
 		if ((playerRank == -1 || (playerName != null && playerName.length() >= 3)) && (keyState.containsKey("space") && !keyState.get("space"))) {
-			gsm.setGameState(gsm.getCurrentGameState(), new CountDownState(gsm, 3, new PlayState(gsm)));
+			setGameState(new CountDownState(3, new PlayState()));
 		}
 		super.keyPressed(e);
 	}

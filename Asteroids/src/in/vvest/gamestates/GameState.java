@@ -6,16 +6,14 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import in.vvest.game.GameStateManager;
-
 public abstract class GameState {
 
-	protected GameStateManager gsm;
 	protected Map<String, Boolean> keyState;
+	private GameState gameState;
 
-	public GameState(GameStateManager gsm) {
-		this.gsm = gsm;
+	public GameState() {
 		keyState = new HashMap<String, Boolean>();
+		gameState = this;
 	}
 
 	public abstract void draw(Graphics g);
@@ -23,6 +21,14 @@ public abstract class GameState {
 	public abstract void update();
 	
 	public void dispose() {};
+	
+	protected void setGameState(GameState gameState) {
+		this.gameState = gameState;
+	}
+	
+	public GameState getGameState() {
+		return gameState;
+	}
 
 	public void keyPressed(KeyEvent e) {
 		int k = e.getKeyCode();

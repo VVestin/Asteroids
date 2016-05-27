@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.vvest.game.GameStateManager;
 import in.vvest.objects.Asteroid;
 import in.vvest.objects.Laser;
 import in.vvest.objects.Player;
@@ -22,8 +21,8 @@ public class MainMenuState extends GameState {
 	private ParticleSystem particles;
 	private long transitionTime;
 	
-	public MainMenuState(GameStateManager gsm) {
-		super(gsm);
+	public MainMenuState() {
+		super();
 		p = new Player(0);
 		p.setPos(new Vec2(50, 230));
 		lasers = new ArrayList<Laser>();
@@ -72,7 +71,7 @@ public class MainMenuState extends GameState {
 		}
 		if (transitionTime != 0) {
 			if (System.currentTimeMillis() >= transitionTime)
-				gsm.setGameState(gsm.getCurrentGameState(), new CountDownState(gsm, 3, new PlayState(gsm)));
+				setGameState(new CountDownState(3, new PlayState()));
 		} else if (asteroids.size() > 1) {
 			transitionTime = System.currentTimeMillis() + 650;
 			asteroids.clear();

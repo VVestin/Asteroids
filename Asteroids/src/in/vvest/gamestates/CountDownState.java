@@ -4,16 +4,14 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
-import in.vvest.game.GameStateManager;
-
 public class CountDownState extends GameState {
 
 	private long startTime;
 	private int countLength; 
 	private GameState nextState;
 	
-	public CountDownState(GameStateManager gsm, int countStart, GameState nextState) {
-		super(gsm);
+	public CountDownState(int countStart, GameState nextState) {
+		super();
 		startTime = System.currentTimeMillis();
 		countLength = countStart;
 		this.nextState = nextState;
@@ -29,7 +27,7 @@ public class CountDownState extends GameState {
 	
 	public void update() {
 		if (countLength - (System.currentTimeMillis() - startTime) / 1000 == 0) {
-			gsm.setGameState(gsm.getCurrentGameState(), nextState);
+			setGameState(nextState);
 		}
 	}
 	

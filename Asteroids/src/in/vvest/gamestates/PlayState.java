@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import in.vvest.game.GameStateManager;
 import in.vvest.objects.Asteroid;
 import in.vvest.objects.Laser;
 import in.vvest.objects.Player;
@@ -24,8 +23,7 @@ public class PlayState extends GameState {
 	private Player p;
 	private int highScore;
 	
-	public PlayState(GameStateManager gsm) {
-		super(gsm);
+	public PlayState() {
 		try {
 			Scanner s = new Scanner(new File("res/highscores.txt"));
 			s.next();
@@ -72,7 +70,7 @@ public class PlayState extends GameState {
 		if (asteroids.size() == 0)
 			resetLevel();
 		else if (p.getNumLives() < 0)
-			gsm.setGameState(gsm.getCurrentGameState(), new GameOverState(gsm, p.getScore()));
+			setGameState(new GameOverState(p.getScore()));
 		
 		particles.update();
 	}
