@@ -14,6 +14,8 @@ public class Player {
 	private static final double TURN_AMT = 0.05;
 	private static final double MAX_SPEED = 5;
 	private static final double ACCELERATION = .1;
+	private static final int RESPAWN_COOLDOWN = 4500;
+	private static final int DEATH_TIME = 2000;
 	
 	private Vec2 pos;
 	private Vec2 vel;
@@ -45,7 +47,7 @@ public class Player {
 	public void draw(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform old = g2d.getTransform();
-		if (!(isInvincible() && (System.currentTimeMillis() / 250) % 3 == 0) && System.currentTimeMillis() - lastDeath > 2000) {
+		if (!(isInvincible() && (System.currentTimeMillis() / 250) % 3 == 0) && System.currentTimeMillis() - lastDeath > DEATH_TIME) {
 			g2d.translate(pos.x, pos.y);
 			g2d.rotate(angle);
 			g2d.setColor(Color.WHITE);
@@ -73,35 +75,37 @@ public class Player {
 	}
 	
 	public void update(Map<String, Boolean> keyState, List<Laser> lasers) {
-		if (keyState.containsKey("a") && keyState.get("a"))
-			angle -= TURN_AMT;
-		if (keyState.containsKey("d") && keyState.get("d"))
-			angle += TURN_AMT;
-		
-		if (keyState.containsKey("w") && keyState.get("w")) {
-			if (vel.lengthSquared() <= Math.pow(MAX_SPEED, 2))
-				vel = vel.add(new Vec2(angle).scale(ACCELERATION));
-			thrusting = true;
-		} else {
-			thrusting = false;
-		}
-		
-		pos = pos.add(vel);
-		vel = vel.scale(0.99);
-		
-		if (pos.x < 0)
-			pos = new Vec2(400, pos.y);
-		else if (pos.x > 400)
-			pos = new Vec2(0, pos.y);
-		
-		if (pos.y < 0)
-			pos = new Vec2(pos.x, 400);
-		else if (pos.y > 400)
-			pos = new Vec2(pos.x, 0);
-		if (keyState.containsKey("space") && keyState.get("space") && System.currentTimeMillis() - lastFire > 250) {
-			lastFire = System.currentTimeMillis();
-			lasers.add(new Laser(pos, angle));
-			Sounds.LASER.play();
+		if (System.currentTimeMillis() - lastDeath > DEATH_TIME) {
+			if (keyState.containsKey("a") && keyState.get("a"))
+				angle -= TURN_AMT;
+			if (keyState.containsKey("d") && keyState.get("d"))
+				angle += TURN_AMT;
+			
+			if (keyState.containsKey("w") && keyState.get("w")) {
+				if (vel.lengthSquared() <= Math.pow(MAX_SPEED, 2))
+					vel = vel.add(new Vec2(angle).scale(ACCELERATION));
+				thrusting = true;
+			} else {
+				thrusting = false;
+			}
+			
+			pos = pos.add(vel);
+			vel = vel.scale(0.99);
+			
+			if (pos.x < 0)
+				pos = new Vec2(400, pos.y);
+			else if (pos.x > 400)
+				pos = new Vec2(0, pos.y);
+			
+			if (pos.y < 0)
+				pos = new Vec2(pos.x, 400);
+			else if (pos.y > 400)
+				pos = new Vec2(pos.x, 0);
+			if (keyState.containsKey("space") && keyState.get("space") && System.currentTimeMillis() - lastFire > 250) {
+				lastFire = System.currentTimeMillis();
+				lasers.add(new Laser(pos, angle));
+				Sounds.LASER.play();
+			}
 		}
 	}
 	
@@ -136,7 +140,7 @@ public class Player {
 	}
 
 	public boolean isInvincible() {
-		return System.currentTimeMillis() - lastDeath < 4500;
+		return System.currentTimeMillis() - lastDeath < RESPAWN_COOLDOWN;
 	}
 	
 	public void addToScore(int points) {
